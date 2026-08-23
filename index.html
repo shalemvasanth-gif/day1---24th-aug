@@ -114,25 +114,31 @@
 <div class="wrap">
   <div class="masthead">
     <span class="brand">Outskill · People Operations</span>
-    <span class="issue">New here? · <b>Day 1</b></span>
+    <span class="issue">New here? · <b>Day 1 &amp; Day 2</b></span>
   </div>
 
-  <h1>one day to go<br>from new kid<br>to <span class="hl">one of us.</span></h1>
-  <p class="standfirst">day one is the whole vibe check — your kit, your logins, the policies that have
-    your back, and a first proper look at what we actually do here.</p>
+  <h1>two days to go<br>from new kid<br>to <span class="hl">one of us.</span></h1>
+  <p class="standfirst">day one is the whole vibe check — who we are and how we work. day two is how the
+    business actually runs, straight from the people running it.</p>
 
   <div class="statrow">
-    <div class="stat"><b>10</b><span>Sessions</span></div>
-    <div class="stat"><b>7</b><span>Speakers</span></div>
-    <div class="stat"><b>6h 45m</b><span>Of content</span></div>
-    <div class="stat"><b>3</b><span>Breaks (fuel up)</span></div>
-    <div class="stat"><b>10:00</b><span>We start</span></div>
+    <div class="stat"><b>2</b><span>Days</span></div>
+    <div class="stat"><b>21</b><span>Sessions</span></div>
+    <div class="stat"><b>16</b><span>Speakers</span></div>
+    <div class="stat"><b>13h 30m</b><span>Of content</span></div>
+    <div class="stat"><b>10:00</b><span>Start, both days</span></div>
   </div>
-  <p class="note">Everything's live and IRL. <b>Show up a few minutes early</b> — the breaks are short and the day moves.
+  <p class="note">Everything's live and IRL. <b>Show up a few minutes early</b> — the breaks are short and the days move.
     No prep, no homework, no stress — just pull up as you are.</p>
 
   <div class="controls">
-    <span class="ctl-label">The rundown</span>
+    <div>
+      <span class="ctl-label">Which day</span>
+      <div class="seg" id="dayseg">
+        <button data-day="1" aria-pressed="true">Day 1</button>
+        <button data-day="2" aria-pressed="false">Day 2</button>
+      </div>
+    </div>
     <span class="swap">Want it on paper? <a href="#" onclick="window.print();return false;">Print the day →</a></span>
   </div>
 
@@ -162,13 +168,31 @@ const S = [
   {"d":1,"t":"Slack Intro","x":"Slack intro / groups / channels / profile","w":"SKS","s":"3:30 PM","e":"4:15 PM","m":45},
   {"d":1,"b":"Tea break","s":"4:15 PM","e":"4:30 PM","m":15},
   {"d":1,"t":"Work Etiquette","x":"Email etiquette / communication etiquette","w":"SKS","s":"4:30 PM","e":"5:30 PM","m":60},
-  {"d":1,"t":"Admin","x":"Introducing admin","w":"Praveen","s":"5:30 PM","e":"6:00 PM","m":30}
+  {"d":1,"t":"Admin","x":"Introducing admin","w":"Praveen","s":"5:30 PM","e":"6:00 PM","m":30},
+
+  {"d":2,"t":"Acquisition","x":"How do we acquire and engage users at scale","w":"Aamir","s":"10:00 AM","e":"10:30 AM","m":30},
+  {"d":2,"t":"Acquisition","x":"How do we acquire and engage users at scale","w":"Ekakh","s":"10:30 AM","e":"11:00 AM","m":30},
+  {"d":2,"t":"Growth","x":"What does it take to grow","w":"Phani Krishna","s":"11:00 AM","e":"11:45 AM","m":45},
+  {"d":2,"b":"Tea break","s":"11:45 AM","e":"12:00 PM","m":15},
+  {"d":2,"t":"Sales","x":"How do we sell","w":"Swadhin","s":"12:00 PM","e":"1:30 PM","m":90},
+  {"d":2,"b":"Lunch break","s":"1:30 PM","e":"2:15 PM","m":45},
+  {"d":2,"t":"Team Activity","x":"Team activity","w":"City POC","s":"2:15 PM","e":"2:30 PM","m":15},
+  {"d":2,"t":"Leadership Talk","x":"Welcome note + vision","w":"Suri","s":"2:30 PM","e":"3:00 PM","m":30},
+  {"d":2,"t":"Leadership Talk","x":"Welcome note","w":"Vaibhav Sisinty","s":"3:00 PM","e":"3:30 PM","m":30},
+  {"d":2,"t":"Experience","x":"What does it take to give best-in-class experience","w":"Uthappa","s":"3:30 PM","e":"4:00 PM","m":30},
+  {"d":2,"b":"Tea break","s":"4:00 PM","e":"4:15 PM","m":15},
+  {"d":2,"t":"Community","x":"What does it mean to build a best-in-class community","w":"Om","s":"4:15 PM","e":"4:45 PM","m":30},
+  {"d":2,"t":"Support","x":"How we support our learners","w":"Vaibhav Shukla","s":"4:45 PM","e":"5:00 PM","m":15},
+  {"d":2,"t":"Research Activity — Part 1","x":"Research activity — competitor analysis — Part 1","w":"SKS / PV","s":"5:00 PM","e":"6:00 PM","m":60}
 ];
 
 const DAYMETA={
  1:{title:'Day 1 — settling in.',
     sub:'Your kit, your logins, the policies that have your back, and a first look at the biz. Wraps <b>6:00 PM</b>.',
-    wrap:'And that\u2019s a wrap on Day 1. You\u2019ve got the people, the policies and the vibe down. Welcome to the team — glad you\u2019re here.'}};
+    wrap:'And that\u2019s a wrap on Day 1. Tomorrow it\u2019s the business itself — acquisition, growth, sales, the whole playbook.'},
+ 2:{title:'Day 2 — how the business runs.',
+    sub:'Straight from the people who own each function, closing out with your first real piece of work. Wraps <b>6:00 PM</b>.',
+    wrap:'Induction complete! You\u2019ve got the people, the policies and the playbook. One thing left — your take-home assignment. Welcome aboard 🎉'}};
 
 const PALETTE=['#2d4a1d','#a1502e','#3d6b7d','#7a5230','#5c3a63','#1f5b4e','#8a3b3b','#3f4a7a'];
 const colorFor=n=>PALETTE[[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%PALETTE.length];
@@ -199,6 +223,13 @@ function paint(){
         </div></div></div>`;
   }).join('');
 }
+document.getElementById('dayseg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  day=+b.dataset.day;
+  [...e.currentTarget.children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  paint();
+  document.querySelector('.controls').scrollIntoView({block:'start'});
+});
 paint();
 </script>
 </body>
