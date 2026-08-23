@@ -108,7 +108,58 @@
     .controls{ position:static; } .hidden{ display:block !important; }
     .row{ break-inside:avoid; }
   }
+  /* ---------- Motion (only when html.anim is set) ---------- */
+  @keyframes rise{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
+  @keyframes rowIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+  @keyframes barGrow{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  @keyframes dotPop{ from{ transform:scale(0); } to{ transform:scale(1); } }
+  @keyframes swipe{ from{ transform:skewX(-3deg) rotate(-.7deg) scaleX(0); } to{ transform:skewX(-3deg) rotate(-.7deg) scaleX(1); } }
+
+  .anim .wrap > *{ opacity:0; animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards; }
+  .anim .wrap > *:nth-child(1){ animation-delay:.05s; }
+  .anim .wrap > *:nth-child(2){ animation-delay:.12s; }
+  .anim .wrap > *:nth-child(3){ animation-delay:.19s; }
+  .anim .wrap > *:nth-child(4){ animation-delay:.26s; }
+  .anim .wrap > *:nth-child(5){ animation-delay:.33s; }
+  .anim .wrap > *:nth-child(6){ animation-delay:.40s; }
+  .anim .wrap > *:nth-child(7){ animation-delay:.47s; }
+  .anim .wrap > *:nth-child(8){ animation-delay:.54s; }
+  .anim .wrap > *:nth-child(9){ animation-delay:.60s; }
+  .anim .wrap > *:nth-child(10){ animation-delay:.66s; }
+  .anim .wrap > *:nth-child(11){ animation-delay:.72s; }
+
+  .anim .hl::before{ transform:skewX(-3deg) rotate(-.7deg) scaleX(0); transform-origin:left;
+                     animation:swipe .55s cubic-bezier(.65,0,.2,1) forwards; animation-delay:.5s; }
+
+  .anim #timeline .row{ opacity:0; animation:rowIn .55s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:var(--d,0s); }
+  .anim #timeline .row .bar{ transform:scaleX(0); transform-origin:left;
+                             animation:barGrow .6s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:calc(var(--d,0s) + .18s); }
+  .anim #timeline .row .time::after{ transform:scale(0);
+                                     animation:dotPop .42s cubic-bezier(.3,1.5,.5,1) forwards; animation-delay:calc(var(--d,0s) + .08s); }
+
+  /* Hover micro-interactions (no transform on the dot, to avoid clashing with the pop animation) */
+  #timeline .row .card{ transition:transform .2s ease; }
+  #timeline .row .time::after{ transition:background .2s ease; }
+  .anim #timeline .row:hover .card{ transform:translateX(4px); }
+  .anim #timeline .row:hover .time::after{ background:var(--lime); }
+
+  @media(prefers-reduced-motion:reduce){
+    .anim .wrap > *,
+    .anim .hl::before,
+    .anim #timeline .row,
+    .anim #timeline .row .bar,
+    .anim #timeline .row .time::after{ animation:none; opacity:1; transform:none; }
+  }
 </style>
+<script>
+  // Enable entrance animations only when motion is welcome. If JS is off, or the user
+  // prefers reduced motion, .anim is never added and everything renders in its resting state.
+  try{
+    if(!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)){
+      document.documentElement.classList.add('anim');
+    }
+  }catch(e){}
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -206,12 +257,13 @@ function paint(){
   document.getElementById('dayTitle').innerHTML=meta.title;
   document.getElementById('daySub').innerHTML=meta.sub;
   document.getElementById('wrapNote').textContent=meta.wrap;
-  document.getElementById('timeline').innerHTML=S.filter(r=>r.d===day).map(r=>{
-    if(r.b) return `<div class="row brk">
+  document.getElementById('timeline').innerHTML=S.filter(r=>r.d===day).map((r,i)=>{
+    const d=(i*0.06).toFixed(2)+'s';
+    if(r.b) return `<div class="row brk" style="--d:${d}">
       <div class="time"><div class="t1">${r.s}</div><div class="t2">${fmtDur(r.m)}</div></div>
       <div class="card"><div class="topic">${esc(r.b)}</div></div></div>`;
     const c=colorFor(r.w);
-    return `<div class="row">
+    return `<div class="row" style="--d:${d}">
       <div class="time"><div class="t1">${r.s}</div><div class="t2">${r.e}</div></div>
       <div class="card">
         <div class="topic">${esc(r.t)}</div>
@@ -231,6 +283,24 @@ document.getElementById('dayseg').addEventListener('click',e=>{
   document.querySelector('.controls').scrollIntoView({block:'start'});
 });
 paint();
+
+// Count-up the numeric stats on load (skips non-numeric ones like "13h 30m" / "10:00").
+if(document.documentElement.classList.contains('anim')){
+  setTimeout(()=>{
+    document.querySelectorAll('.stat b').forEach(el=>{
+      const raw=el.textContent.trim();
+      if(!/^\d+$/.test(raw)) return;
+      const target=+raw, dur=900, t0=performance.now(), ease=t=>1-Math.pow(1-t,3);
+      el.textContent='0';
+      const step=now=>{
+        const p=Math.min(1,(now-t0)/dur);
+        el.textContent=Math.round(ease(p)*target);
+        if(p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  },380);
+}
 </script>
 </body>
 </html>
